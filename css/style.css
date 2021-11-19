@@ -57,7 +57,7 @@ table.calendar .weekdays > th:last-child {
 }
 
 table.calendar .week > td {
-  height: 75px;
+  height: 70px;
   padding: 0;
   border: 1px solid #a0a0a0;
 }
