@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+@media (display-mode: standalone) {
+  body {
+    position: fixed;
+  }
+}
+
+@media screen and (display-mode: standalone) and (orientation: landscape) {
+  body {
+    position: initial;
+  }
+  .theme-wrapper {
+    height: initial;
+  }
+}

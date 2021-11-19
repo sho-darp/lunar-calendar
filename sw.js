@@ -1,0 +1,64 @@
+const CACHE_NAME = "pwa-lunar-calendar";
+const jsons = [...Array(50)].map((_, i) => `json/${2000 + i}_calendar.json`)
+
+const urlsToCache = [
+  // キャッシュ化したいコンテンツ
+  "index.html",
+  "img/favicon.png",
+  "css/style.css",
+  "css/sp.css",
+  "css/theme.css",
+  "css/pwa.css",
+  "https://unpkg.com/bootstrap/dist/css/bootstrap.min.css",
+  "https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css",
+  "https://unpkg.com/swiper@7/swiper-bundle.min.css",
+  "https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js",
+  "https://unpkg.com/vue@latest/dist/vue.min.js",
+  "https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js",
+  "https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js",
+  "https://unpkg.com/swiper@7/swiper-bundle.min.js",
+  "https://cdn.jsdelivr.net/npm/vue2-touch-events@3.2.2/index.min.js",
+  ...jsons
+];
+
+self.addEventListener("install", function (event) {
+  // console.log("sw event: install called");
+  // console.log(jsons)
+
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.addAll(urlsToCache);
+    })
+  );
+});
+
+self.addEventListener("fetch", function (event) {
+  // console.log("sw event: fetch called");
+
+  event.respondWith(
+    caches.match(event.request).then(function (response) {
+      return response ? response : fetch(event.request);
+    })
+  );
+});
+
+self.addEventListener("push", function (event) {
+  console.log("sw event: push called");
+  console.log(event.data)
+
+  const notificationDataObj = event.data.json();
+  const content = {
+    body: notificationDataObj.body,
+  };
+  event.waitUntil(
+    self.registration.showNotification(notificationDataObj.title, content)
+  );
+});
+
+self.addEventListener('beforeinstallprompt', e => {
+  console.log('stop banner display');
+  e.preventDefault();
+  return false;
+})

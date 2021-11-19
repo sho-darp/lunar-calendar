@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="user-select-none">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,minimum-scale=1.0,user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>旧暦カレンダー</title>
+    <link rel="apple-touch-icon" href="img/icon_256.png" sizes="256x256" />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/sp.css" />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/pwa.css" />
+    <link rel="manifest" href="manifest.json" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="theme-wrapper" :class="theme">
+        <b-navbar toggleable class="mx-2" v-cloak>
+          <div class="justify-content-center">
+            <b-navbar-nav>
+              <div class="header-date">{{ year }}年 {{ showMonth(month) }}</div>
+            </b-navbar-nav>
+          </div>
+
+          <div class="ml-auto">
+            <b-button class="reload" variant="oultine-primary" v-b-modal.help>
+              <b-icon icon="question-circle"></b-icon>
+            </b-button>
+            <b-modal
+              id="help"
+              title="使い方"
+              body-class="rounded-modal"
+              content-class="rounded-modal"
+              dialog-class="rounded-modal"
+              body-bg-variant="yellow"
+              hide-header
+              hide-footer
+            >
+              <p class="fw-bold">PCの場合</p>
+              <ul>
+                <li>左キー：前月</li>
+                <li>右キー：次月</li>
+                <li>上キー：今月</li>
+              </ul>
+              <p class="fw-bold">スマートフォンの場合</p>
+              <ul>
+                <li>左フリック：前月</li>
+                <li>右フリック：次月</li>
+                <li>長押し　　：今月</li>
+              </ul>
+
+              <p>
+                本ページはPWAに対応しています。
+                PCまたはスマートフォンにインストールすることで、オフラインでも使用可能になります。
+              </p>
+            </b-modal>
+
+            <b-button
+              v-if="isPWA"
+              class="reload"
+              variant="oultine-primary"
+              @click="reload"
+            >
+              <b-icon
+                icon="arrow-clockwise"
+                :animation="reloading ? 'spin': ''"
+              ></b-icon>
+            </b-button>
+            <b-navbar-toggle target="navbar-toggle-collapse"> </b-navbar-toggle>
+          </div>
+          <b-collapse id="navbar-toggle-collapse" is-nav>
+            <b-form-radio
+              v-for="color in colors"
+              v-model="selectedTheme"
+              name="some-radios"
+              :value="color.class"
+              class="color-picker px-2 py-2"
+              @change="updateTheme"
+            >
+              <span :style="`background: ${color.code}`"></span>
+            </b-form-radio>
+          </b-collapse>
+        </b-navbar>
+
+        <b-container
+          v-touch:swipe="swipeHandler"
+          v-touch:touchhold="touchholdHandler"
+          fluid
+        >
+          <b-row class="mb-2">
+            <b-col class="px-0 mx-2">
+              <b-table
+                class="calendar"
+                :fields="weekdays"
+                :items="days"
+                thead-tr-class="text-center weekdays"
+                tbody-tr-class="week"
+                bordered
+              >
+                <template #cell()="{item, field, index}">
+                  <div
+                    class="px-0"
+                    :class="{ today: dateFns.isToday(item[weekdayToIndex(field.key)].date) }"
+                  >
+                    <div
+                      class="day"
+                      :class="{ other: item[weekdayToIndex(field.key)].isCurrentMonth === false }"
+                    >
+                      {{ item[weekdayToIndex(field.key)].day }}
+                    </div>
+                    <div class="day-row">
+                      {{ item[weekdayToIndex(field.key)].lunarDate }}
+                    </div>
+                    <div class="day-row">
+                      {{ item[weekdayToIndex(field.key)].rokuyo }}
+                    </div>
+                    <div
+                      v-if="item[weekdayToIndex(field.key)].holiday !== ''"
+                      class="day-holiday"
+                    >
+                      {{ item[weekdayToIndex(field.key)].holiday }}
+                    </div>
+                  </div>
+                </template>
+              </b-table>
+            </b-col>
+          </b-row>
+        </b-container>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue2-touch-events@3.2.2/index.min.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("sw.js")
+          .then(async (registration) => {
+            console.log(
+              "ServiceWorker registration successful with scope: ",
+              registration.scope
+            );
+          })
+          .catch((err) => {
+            console.error("ServiceWorker registration failed: ", err);
+          });
+      }
+
+      Vue.use(vueTouchEvents, {
+        disableClick: true,
+      });
+      const app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            currentDate: new Date(),
+            lunarDateJSON: null,
+            selectedTheme: "",
+            isPWA: false,
+            reloading: false,
+          };
+        },
+        computed: {
+          weekdays() {
+            return ["日", "月", "火", "水", "木", "金", "土"];
+          },
+          year() {
+            return dateFns.getYear(this.currentDate);
+          },
+          month() {
+            return dateFns.getMonth(this.currentDate) + 1;
+          },
+          days() {
+            const getDateInfo = (d) => {
+              const month = `${this.month}`.padStart(2, "0");
+              const day = `${dateFns.getDate(d)}`.padStart(2, "0");
+              const key = `${this.year}-${month}-${day}`;
+              const dateInfo = this.lunarDateJSON
+                ? this.lunarDateJSON[key]
+                : null;
+              const lunarDate = dateInfo
+                ? `旧${dateInfo.kyurekim}/${dateInfo.kyurekid}`
+                : "";
+
+              const rokuyo = dateInfo ? dateInfo.rokuyou : "";
+              const holiday = dateInfo ? dateInfo.holiday : "";
+
+              return {
+                date: d,
+                day: dateFns.getDate(d),
+                lunarDate: lunarDate,
+                rokuyo: rokuyo,
+                holiday: holiday,
+              };
+            };
+
+            const startOfMonth = dateFns.startOfMonth(this.currentDate);
+
+            const startDayOfWeek = dateFns.getDay(startOfMonth);
+            const startPadding = [...Array(startDayOfWeek)].map((_, i) => {
+              return Object.assign(
+                {},
+                getDateInfo(dateFns.addDays(startOfMonth, -startDayOfWeek + i)),
+                {
+                  lunarDate: "",
+                  rokuyo: "",
+                  holiday: "",
+                  isCurrentMonth: false,
+                }
+              );
+            });
+
+            const endOfMonth = dateFns.endOfMonth(this.currentDate);
+            const endDayOfWeek = dateFns.getDay(endOfMonth);
+            const endPadding = [...Array(6 - endDayOfWeek)].map((_, i) => {
+              return Object.assign(
+                {},
+                getDateInfo(dateFns.addDays(endOfMonth, i + 1)),
+                {
+                  lunarDate: "",
+                  rokuyo: "",
+                  holiday: "",
+                  isCurrentMonth: false,
+                }
+              );
+            });
+
+            const days = [
+              ...startPadding,
+              ...dateFns
+                .eachDay(
+                  dateFns.startOfMonth(this.currentDate),
+                  dateFns.endOfMonth(this.currentDate)
+                )
+                .map(
+                  (d) =>
+                    Object.assign({}, getDateInfo(d), { isCurrentMonth: true }),
+                  this
+                ),
+              ...endPadding,
+            ];
+
+            return this.sliceByNumber(days, 7);
+          },
+          colors() {
+            return [
+              { class: "", code: "#ffffff" },
+              { class: "dark", code: "#6a6060" },
+              { class: "sakura", code: "#ffcfdf" },
+              { class: "tea", code: "#dcedc2" },
+            ];
+          },
+          theme() {
+            if (this.selectedTheme === "") {
+              return "";
+            }
+
+            return `theme-${this.selectedTheme}`;
+          },
+        },
+        watch: {
+          year: {
+            async handler(value) {
+              await this.updateLunarDate();
+            },
+            immediate: true,
+          },
+        },
+        created() {
+          this.selectedTheme = localStorage.getItem("theme");
+        },
+        mounted() {
+          this.$nextTick(() => {
+            if (window.matchMedia("(display-mode: standalone)").matches) {
+              this.isPWA = true;
+            }
+
+            window.addEventListener("keydown", (event) => {
+              switch (event.key) {
+                case "ArrowLeft":
+                  this.addMonth(-1);
+                  break;
+                case "ArrowRight":
+                  this.addMonth(1);
+                  break;
+                case "ArrowUp":
+                  this.currentDate = new Date();
+                default:
+                  break;
+              }
+            });
+          });
+        },
+        methods: {
+          async updateLunarDate() {
+            try {
+              const res = await fetch(`json/${this.year}_calendar.json`);
+              const data = await res.json();
+              this.lunarDateJSON = data.datelist;
+            } catch (e) {
+              console.error(e);
+            }
+          },
+          showMonth(month) {
+            const m = `${month}`.padStart(2, " ");
+            return `${m}月`;
+          },
+          addMonth(delta) {
+            this.currentDate = dateFns.addMonths(this.currentDate, delta);
+          },
+          weekdayToIndex(weekday) {
+            return this.weekdays.findIndex((w) => w === weekday);
+          },
+          sliceByNumber(array, number) {
+            const length = Math.ceil(array.length / number);
+            return new Array(length)
+              .fill()
+              .map((_, i) => array.slice(i * number, (i + 1) * number));
+          },
+          getDate(date) {
+            if (!date || date === "") {
+              return "";
+            }
+
+            return dateFns.getDate(date);
+          },
+          swipeHandler(direction) {
+            switch (direction) {
+              case "left":
+                this.addMonth(1);
+                break;
+              case "right":
+                this.addMonth(-1);
+                break;
+              default:
+                break;
+            }
+          },
+          touchholdHandler(a) {
+            this.currentDate = new Date();
+          },
+          updateTheme(value) {
+            localStorage.setItem("theme", value);
+          },
+          reload() {
+            this.reloading = true;
+            window.location.reload();
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,143 @@
+html {
+  touch-action: manipulation;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  height: 100vh;
+  width: 100%;
+  min-height: 100%;
+}
+
+.theme-wrapper {
+  min-height: 100%;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.header-date {
+  font-weight: bold;
+}
+
+nav .navbar-toggler:focus {
+  box-shadow: none;
+}
+
+table.calendar {
+  height: calc(100% - 5px);
+}
+
+table.calendar tbody {
+  border: none !important;
+}
+
+table.calendar .weekdays th {
+  width: 150px;
+  max-width: 150px;
+  height: 30px;
+  border: 1px solid #a0a0a0;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+table.calendar .weekdays > th:first-child {
+  color: #ff165d;
+}
+
+table.calendar .weekdays > th:last-child {
+  color: royalblue;
+}
+
+table.calendar .week > td {
+  height: 85px;
+  padding: 0;
+  border: 1px solid #a0a0a0;
+}
+
+table.calendar .week > td > div {
+  height: calc(100% + 1px);
+}
+
+table.calendar .week > td > div.today {
+  background-color: #f8b0b0;
+}
+
+table.calendar .week div.day {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+table.calendar .week div.day.other {
+  color: #bdbdbd;
+}
+
+table.calendar .week div.day-row {
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+table.calendar .week div.day-holiday {
+  font-size: 0.8rem;
+  text-align: center;
+  width: 100%;
+  background-color: #f1c4c4;
+}
+
+div.color-picker {
+  display: inline-block;
+}
+
+div.color-picker input[type="radio"] {
+  display: none;
+}
+
+div.color-picker input[type="radio"] + label {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+div.color-picker input[type="radio"]:checked + label > span {
+  transform: scale(1.25);
+}
+
+div.color-picker input[type="radio"] + label > span {
+  border: 2px solid;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.2s ease-in-out;
+}
+
+button.close {
+  background-color: transparent;
+  border: 0;
+  font-size: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.rounded-modal {
+  border-radius: 1rem !important;
+  position: relative;
+  z-index: 1;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.bg-yellow {
+  background-color: #ffeeb3;
+}

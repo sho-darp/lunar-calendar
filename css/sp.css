@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+@media screen and (max-width: 576px) {
+  .calendar .week div.day {
+    font-size: 0.9rem;
+  }
+
+  .calendar .week div.day-row {
+    font-size: 0.7rem !important;
+  }
+
+  table.calendar .week div.day {
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  table.calendar .week div.day-holiday {
+    font-size: 9px;
+  }
+}
