@@ -1,7 +1,6 @@
 # lunar-calendar
 
-旧暦表示のあるカレンダーです。  
-PWA対応しているので、PCまたはスマートフォンにインストール可能です。
+PWA対応の旧暦カレンダーです。  
 
 # 公開ページ
 https://sho-darp.github.io/lunar-calendar/index.html
