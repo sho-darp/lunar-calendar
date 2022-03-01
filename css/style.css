@@ -23,8 +23,9 @@ body {
   display: none;
 }
 
-.header-date {
+li.navbar-text.header-date {
   font-weight: bold;
+  color: initial;
 }
 
 nav .navbar-toggler:focus {
@@ -67,7 +68,7 @@ table.calendar .week > td > div {
 }
 
 table.calendar .week > td > div.today {
-  background-color: #f8b0b0;
+  background: #f8b0b0;
 }
 
 table.calendar .week div.day {
@@ -77,7 +78,7 @@ table.calendar .week div.day {
 }
 
 table.calendar .week div.day.other {
-  color: #bdbdbd;
+  color: #585858;
 }
 
 table.calendar .week div.day-row {
@@ -119,7 +120,7 @@ div.color-picker input[type="radio"] + label > span {
 }
 
 button.close {
-  background-color: transparent;
+  background: transparent;
   border: 0;
   font-size: 1.5rem;
 }
@@ -139,5 +140,5 @@ body.modal-open {
 }
 
 .bg-yellow {
-  background-color: #ffeeb3;
+  background: #ffeeb3;
 }

@@ -2,16 +2,16 @@
 
 /* sakura */
 div.theme-sakura {
-  background-color: #ffcfdf;
-  transition: background-color 0.2s ease-in-out;
+  background: #ffcfdf;
+  transition: background 0.2s ease-in-out;
 }
 
 div.theme-sakura table.calendar {
-  background-color: #e0f9b5;
+  background: #e0f9b5;
 }
 
 div.theme-sakura .calendar .week > td > div.today {
-  background-color: #f8b0b0;
+  background: #f8b0b0;
 }
 
 div.theme-sakura table.calendar .weekdays > th:first-child {
@@ -23,15 +23,15 @@ div.theme-sakura table.calendar .weekdays > th:last-child {
 }
 
 div.theme-sakura table.calendar .week div.day-holiday {
-  background-color: #a5dee5;
+  background: #a5dee5;
 }
 
 /* dark */
 
 div.theme-dark {
-  background-color: #333333;
+  background: #333333;
   color: #f5f5f5;
-  transition: background-color 0.2s ease-in-out;
+  transition: background 0.2s ease-in-out;
 }
 
 div.theme-dark button > span {
@@ -42,8 +42,12 @@ div.theme-dark button.reload > svg {
   color: #f5f5f5;
 }
 
+div.theme-dark li.navbar-text.header-date {
+  color: #f5f5f5;
+}
+
 div.theme-dark table.calendar {
-  background-color: #333333;
+  background: #333333;
   color: #f5f5f5;
 }
 
@@ -56,23 +60,27 @@ div.theme-dark table.calendar .weekdays > th:last-child {
 }
 
 div.theme-dark .calendar .week > td > div.today {
-  background-color: #b15eaa;
+  background: #7f4473;
   color: #f5f5f5;
 }
 
 div.theme-dark table.calendar .week div.day-holiday {
-  background-color: #706c61;
+  background: #706c61;
+}
+
+div.theme-dark table.calendar .week div.day.other {
+  color: #c2c2c2;
 }
 
 /* tea */
 div.theme-tea {
-  background-color: #dcedc2;
+  background: #dcedc2;
   color: #212121;
-  transition: background-color 0.2s ease-in-out;
+  transition: background 0.2s ease-in-out;
 }
 
 div.theme-tea table.calendar {
-  background-color: #ffd3b5;
+  background: #ffd3b5;
   color: #212121;
 }
 
@@ -85,10 +93,10 @@ div.theme-tea table.calendar .weekdays > th:last-child {
 }
 
 div.theme-tea table.calendar .week > td > div.today {
-  background-color: #c6e9e8;
+  background: #c6e9e8;
   color: #212121;
 }
 
 div.theme-tea table.calendar .week div.day-holiday {
-  background-color: #fdffab;
+  background: #fdffab;
 }

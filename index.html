@@ -37,7 +37,9 @@
         <b-navbar toggleable class="mx-2" v-cloak>
           <div class="justify-content-center">
             <b-navbar-nav>
-              <div class="header-date">{{ year }}年 {{ showMonth(month) }}</div>
+              <b-nav-text class="header-date">
+                {{ year }}年 {{ showMonth(month) }}
+              </b-nav-text>
             </b-navbar-nav>
           </div>
 
