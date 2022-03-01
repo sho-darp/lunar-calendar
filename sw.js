@@ -1,5 +1,5 @@
 const CACHE_NAME = "pwa-lunar-calendar";
-const jsons = [...Array(50)].map((_, i) => `json/${2000 + i}_calendar.json`);
+const jsons = [...Array(50)].map((_, i) => `json/${2000 + i}_calendar.json.gz`);
 
 const urlsToCache = [
   // キャッシュ化したいコンテンツ
@@ -10,6 +10,7 @@ const urlsToCache = [
   "css/theme.css",
   "css/pwa.css",
   "https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js",
+  "https://cdn.jsdelivr.net/npm/pako@2.0.4/dist/pako.min.js",
   "https://unpkg.com/bootstrap@5.1.3/dist/css/bootstrap.min.css",
   "https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css",
   "https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js",

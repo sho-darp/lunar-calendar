@@ -152,6 +152,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-touch-events@3.2.2/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pako@2.0.4/dist/pako.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue-icons.min.js"></script>
     <script>
@@ -317,9 +318,13 @@
         methods: {
           async updateLunarDate() {
             try {
-              const res = await fetch(`json/${this.year}_calendar.json`);
-              const data = await res.json();
-              this.lunarDateJSON = data.datelist;
+              const res = await fetch(`json/${this.year}_calendar.json.gz`);
+              const blob = await res.blob();
+              const buffer = await blob.arrayBuffer();
+              const decompressed = JSON.parse(
+                pako.inflate(buffer, { to: "string" })
+              );
+              this.lunarDateJSON = decompressed.datelist;
             } catch (e) {
               console.error(e);
             }
