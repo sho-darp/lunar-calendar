@@ -23,9 +23,6 @@ const urlsToCache = [
 ];
 
 self.addEventListener("install", function (event) {
-  // console.log("sw event: install called");
-  // console.log(jsons)
-
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       return cache.addAll(urlsToCache);
@@ -34,8 +31,6 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
-  // console.log("sw event: fetch called");
-
   event.respondWith(
     caches.match(event.request).then(function (response) {
       return response ? response : fetch(event.request);
@@ -44,9 +39,6 @@ self.addEventListener("fetch", function (event) {
 });
 
 self.addEventListener("push", function (event) {
-  console.log("sw event: push called");
-  console.log(event.data);
-
   const notificationDataObj = event.data.json();
   const content = {
     body: notificationDataObj.body,
@@ -57,7 +49,6 @@ self.addEventListener("push", function (event) {
 });
 
 self.addEventListener("beforeinstallprompt", (e) => {
-  console.log("stop banner display");
   e.preventDefault();
   return false;
 });
