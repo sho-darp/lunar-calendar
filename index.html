@@ -159,12 +159,7 @@
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("sw.js")
-          .then(async (registration) => {
-            console.log(
-              "ServiceWorker registration successful with scope: ",
-              registration.scope
-            );
-          })
+          .then(async (registration) => {})
           .catch((err) => {
             console.error("ServiceWorker registration failed: ", err);
           });
