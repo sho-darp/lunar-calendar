@@ -3,7 +3,7 @@
 PWA対応の旧暦カレンダーです。  
 
 # 公開ページ
-https://sho-darp.github.io/lunar-calendar/index.html
+https://sho-darp.github.io/lunar-calendar/
 
 
 # その他
