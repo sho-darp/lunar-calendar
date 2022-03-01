@@ -1,2 +1,3 @@
+url: "https://sho-darp.github.io"
 plugins:
-  – jekyll-sitemap
+  - jekyll-sitemap
