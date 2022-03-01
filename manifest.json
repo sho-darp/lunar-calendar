@@ -4,6 +4,7 @@
   "display": "standalone",
   "start_url": "index.html",
   "orientation": "portrait",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "img/icon_256.png",

@@ -8,6 +8,7 @@
       content="width=device-width,initial-scale=1.0,minimum-scale=1.0"
     />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="theme-color" content="#ffffff" />
     <title>旧暦カレンダー</title>
     <link rel="apple-touch-icon" href="img/icon_256.png" sizes="256x256" />
     <link rel="icon" type="image/png" href="img/favicon.png" />
@@ -366,6 +367,13 @@
           },
           updateTheme(value) {
             localStorage.setItem("theme", value);
+
+            const color = this.colors.find((c) => c.class === value);
+            if (color) {
+              // metaタグのtheme-colorを変更する
+              document.querySelector("meta[name='theme-color'").content =
+                color.code;
+            }
           },
           reload() {
             this.reloading = true;
