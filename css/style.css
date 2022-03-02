@@ -32,10 +32,6 @@ nav .navbar-toggler:focus {
   box-shadow: none;
 }
 
-table.calendar {
-  height: calc(100% - 5px);
-}
-
 table.calendar tbody {
   border: none !important;
 }
@@ -64,7 +60,8 @@ table.calendar .week > td {
 }
 
 table.calendar .week > td > div {
-  height: calc(100% + 1px);
+  min-height: calc(100% + 1px);
+  height: fit-content;
 }
 
 table.calendar .week > td > div.today {
