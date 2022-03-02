@@ -175,6 +175,17 @@
           });
       }
 
+      const toArrayBuffer = (blob) =>
+        blob.arrayBuffer?.() ??
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = reject;
+          reader.onload = () => {
+            resolve(reader.result);
+          };
+          reader.readAsArrayBuffer(blob);
+        });
+
       Vue.use(vueTouchEvents, {
         disableClick: true,
       });
@@ -325,7 +336,7 @@
             try {
               const res = await fetch(`json/${this.year}_calendar.json.gz`);
               const blob = await res.blob();
-              const buffer = await blob.arrayBuffer();
+              const buffer = await toArrayBuffer(blob);
               const decompressed = JSON.parse(
                 pako.inflate(buffer, { to: "string" })
               );
