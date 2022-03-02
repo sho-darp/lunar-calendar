@@ -287,7 +287,7 @@
           colors() {
             return [
               { class: "", code: "#ffffff" },
-              { class: "dark", code: "#6a6060" },
+              { class: "dark", code: "#333333" },
               { class: "sakura", code: "#ffcfdf" },
               { class: "tea", code: "#dcedc2" },
             ];
@@ -331,6 +331,12 @@
                   break;
               }
             });
+
+            // テーマが設定済みの場合は設定する
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+              this.updateTheme(theme);
+            }
           });
         },
         methods: {
